@@ -113,7 +113,7 @@ RSpec.describe 'Applications' do
       expect(page).to have_content("Status: Pending")
     end
 
-    xit 'returns partial matches from search' do
+    it 'returns partial matches from search' do
       visit "/applications/#{@newapp.id}"
       fill_in :search, with: 'Al'
       click_button "Search"
