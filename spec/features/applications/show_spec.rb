@@ -95,13 +95,25 @@ RSpec.describe 'Applications' do
       expect(page).to have_content(@pet_4.name)
     end
 
-    # it 'has a submit application button if one or more pets is added to the application' do
-    #   visit "/applications/#{@newapp.id}"
-    #
-    #   expect(page).to have_button("Submit Application")
-    # end
+    it 'has a submit application button if one or more pets is added to the application' do
+      visit "/applications/#{@newapp.id}"
 
-    xit 'returns partial matches from search' do
+      expect(page).to have_button("Submit Application")
+    end
+
+    it 'returns to page after submission with updated information' do
+      visit "/applications/#{@newapp.id}"
+      expect(page).to_not have_content("Because I love animals")
+
+      fill_in :good_fit, with: 'Because I love animals'
+      click_button "Submit Application"
+
+      expect(current_path).to eq("/applications/#{@newapp.id}")
+      expect(page).to have_content("Because I love animals")
+      expect(page).to have_content("Status: Pending")
+    end
+
+    it 'returns partial matches from search' do
       visit "/applications/#{@newapp.id}"
       fill_in :search, with: 'Al'
       click_button "Search"
@@ -110,6 +122,27 @@ RSpec.describe 'Applications' do
       expect(page).to have_content(@pet_3.name)
       expect(page).to have_content(@pet_4.name)
       expect(page).to have_content(@pet_5.name)
+    end
+
+    it 'search for pet names is case insensitive' do
+      pet_6 = @shelter.pets.create({name: 'STAR Lord', breed: "terrier", age: 4, adoptable: true})
+      pet_7 = @shelter.pets.create({name: 'Starman', breed: 'pommerian', age: 2, adoptable: true})
+      pet_8 = @shelter.pets.create({name: 'star', breed: 'corgi', age: 2, adoptable: true})
+      visit "/applications/#{@newapp.id}"
+      fill_in :search, with: 'star'
+      click_button "Search"
+
+      expect(current_path).to eq("/applications/#{@newapp.id}")
+      expect(page).to have_content(pet_7.name)
+      expect(page).to have_content(pet_6.name)
+      expect(page).to have_content(pet_8.name)
+    end
+
+    it 'will not allow submission with no pets' do
+      application = Application.create!({name: 'Chaz Simons', street_address: '1234 Cool Guy Rd', city: 'Las Vegas', state: 'Nevada', zip_code: 89148})
+
+      visit "/applications/#{application.id}"
+      expect(page).to_not have_content("Submit Application")
     end
   end
 end
