@@ -21,7 +21,7 @@
   <% end %>
 <% end %>
 
-<% if @application.pets != nil %>
+<% if @application.pets.any? == true && @application.status == "In Progress" %>
   <%= form_with url: "/applications/#{@application.id}/edit", method: :patch, local: true do |f| %>
     <%= f.label :good_fit %>
     <%= f.text_area :good_fit %>

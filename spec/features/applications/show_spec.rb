@@ -11,7 +11,7 @@ RSpec.describe 'Applications' do
         state: 'NV',
         zip_code: 89106,
         good_fit: '',
-        status: ''
+        status: 'In Progress'
         })
       @pet1 = @newapp.pets.create({
         name: 'Rex',
@@ -97,7 +97,7 @@ RSpec.describe 'Applications' do
 
     it 'has a submit application button if one or more pets is added to the application' do
       visit "/applications/#{@newapp.id}"
-
+      
       expect(page).to have_button("Submit Application")
     end
 
