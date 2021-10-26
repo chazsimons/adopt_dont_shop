@@ -6,7 +6,7 @@ class ApplicationsController < ApplicationController
 
   def show
     @application = Application.find(params[:id])
-    @pets_found = Pet.adoptable.search_for(params)
+    @pets_found = Pet.adoptable.search_for(params[:search])
   end
 
   def new
@@ -22,18 +22,15 @@ class ApplicationsController < ApplicationController
     end
   end
 
-  def update
-    @application = Application.find(params[:id])
-    @application.pets << Pet.find(params[:pets_id])
-    redirect_to "/applications/#{@application.id}"
+  def edit
+    application = Application.find(params[:id])
+    application.update(app_params)
+    redirect_to "/applications/#{application.id}"
   end
 
   private
 
     def app_params
-      if params[:status] == nil || params[:status] == ""
-        params[:status] = 'In Progress'
-      end
-      params.permit(:name, :street_address, :city, :state, :zip_code, :status)
+      params.permit(:name, :street_address, :city, :state, :zip_code, :status, :good_fit)
     end
 end

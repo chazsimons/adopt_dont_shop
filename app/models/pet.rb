@@ -13,7 +13,7 @@ class Pet < ApplicationRecord
     where(adoptable: true)
   end
 
-  def self.search_for(params)
-    where(name: params[:search])
+  def self.search_for(name)
+    where(name: name)
   end
 end

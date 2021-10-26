@@ -95,11 +95,23 @@ RSpec.describe 'Applications' do
       expect(page).to have_content(@pet_4.name)
     end
 
-    # it 'has a submit application button if one or more pets is added to the application' do
-    #   visit "/applications/#{@newapp.id}"
-    #
-    #   expect(page).to have_button("Submit Application")
-    # end
+    it 'has a submit application button if one or more pets is added to the application' do
+      visit "/applications/#{@newapp.id}"
+
+      expect(page).to have_button("Submit Application")
+    end
+
+    it 'returns to page after submission with updated information' do
+      visit "/applications/#{@newapp.id}"
+      expect(page).to_not have_content("Because I love animals")
+
+      fill_in :good_fit, with: 'Because I love animals'
+      click_button "Submit Application"
+
+      expect(current_path).to eq("/applications/#{@newapp.id}")
+      expect(page).to have_content("Because I love animals")
+      expect(page).to have_content("Status: Pending")
+    end
 
     xit 'returns partial matches from search' do
       visit "/applications/#{@newapp.id}"
