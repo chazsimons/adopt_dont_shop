@@ -13,7 +13,7 @@ class Pet < ApplicationRecord
     where(adoptable: true)
   end
 
-  def self.search_for(name)
-    where(name: name)
+  def self.search_for(search_name)
+    where(name: search_name)
   end
 end
