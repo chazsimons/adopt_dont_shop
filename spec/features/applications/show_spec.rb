@@ -123,5 +123,19 @@ RSpec.describe 'Applications' do
       expect(page).to have_content(@pet_4.name)
       expect(page).to have_content(@pet_5.name)
     end
+
+    it 'search for pet names is case insensitive' do
+      pet_6 = @shelter.pets.create({name: 'STAR Lord', breed: "terrier", age: 4, adoptable: true})
+      pet_7 = @shelter.pets.create({name: 'Starman', breed: 'pommerian', age: 2, adoptable: true})
+      pet_8 = @shelter.pets.create({name: 'star', breed: 'corgi', age: 2, adoptable: true})
+      visit "/applications/#{@newapp.id}"
+      fill_in :search, with: 'star'
+      click_button "Search"
+
+      expect(current_path).to eq("/applications/#{@newapp.id}")
+      expect(page).to have_content(pet_7.name)
+      expect(page).to have_content(pet_6.name)
+      expect(page).to have_content(pet_8.name)
+    end
   end
 end
