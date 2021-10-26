@@ -137,5 +137,12 @@ RSpec.describe 'Applications' do
       expect(page).to have_content(pet_6.name)
       expect(page).to have_content(pet_8.name)
     end
+
+    it 'will not allow submission with no pets' do
+      application = Application.create!({name: 'Chaz Simons', street_address: '1234 Cool Guy Rd', city: 'Las Vegas', state: 'Nevada', zip_code: 89148})
+
+      visit "/applications/#{application.id}"
+      expect(page).to_not have_content("Submit Application")
+    end
   end
 end
