@@ -18,6 +18,7 @@ RSpec.describe Pet, type: :model do
     @pet_1 = @shelter_1.pets.create(name: 'Mr. Pirate', breed: 'tuxedo shorthair', age: 5, adoptable: true)
     @pet_2 = @shelter_1.pets.create(name: 'Clawdia', breed: 'shorthair', age: 3, adoptable: true)
     @pet_3 = @shelter_1.pets.create(name: 'Ann', breed: 'ragdoll', age: 3, adoptable: false)
+    @pet_4 = @shelter_1.pets.create(name: 'Andy', breed: 'munchkin', age: 2, adoptable: false)
   end
 
   describe 'class methods' do
@@ -33,12 +34,13 @@ RSpec.describe Pet, type: :model do
       end
     end
 
-    # describe '#search_for' do
-    #   it 'returns a list of adoptable pets by name' do
-    #     params =
-    #     expect(Pet.search_for('Ann')).to eq([@pet_3])
-    #   end
-    # end
+    describe '#search_for' do
+      it 'returns a list of pets by name, including partial matches and case insensitive' do
+        expect(Pet.search_for('An')).to eq([@pet_3, @pet_4])
+        expect(Pet.search_for('an')).to eq([@pet_3, @pet_4])
+        expect(Pet.search_for('A')).to eq([@pet_1, @pet_2, @pet_3, @pet_4])
+      end
+    end
   end
 
   describe 'instance methods' do
